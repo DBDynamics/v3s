@@ -61,7 +61,7 @@ def printA(delay_s):
     # 4. 发送打印指令至串口
     ser.write(print_text)
     time.sleep(delay_s)
-    ser.
+    ser.close() # Serial对象没有stop方法，应该使用close()
 printA(1)
 # 5. 关闭串口
 ser.close()
