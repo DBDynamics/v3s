@@ -157,9 +157,10 @@ class Bee:
         self.m.seek(0x5500)
         self.m.write(self._sip_frame_data)
     
-    def setUserData(self, index):
+    def setUserData(self, index, value):
         self.m.seek(0x5500+index*4)
-        self.m.write(self._sip_frame_data)
+        self.m.write(value.to_bytes(4, byteorder='little', signed=True))
+        
     def getUserData(self, index):
         self.m.seek(0x5500+index*4)
         value = int.from_bytes(self.m.read(4),"little", signed=True)
