@@ -431,24 +431,17 @@ for brightness in range(0, 256, 5):
 ```
 
 ## 参考示例
-
 ### 项目案例
-- [PyV3s控制Ant4和热敏打印机](../../projects/OpenSource/001)
-- [多轴运动控制系统](../../projects/OpenSource/002)
-- [视觉检测与分拣系统](../../projects/OpenSource/003)
-
-### 代码库
-- [GitHub开源项目](https://github.com/dbd-tech/PyV3s)
-- [示例代码集合](../../examples/)
 
 ## 相关视频
-
 ### 教程视频
-- [PyV3s快速入门指南](https://www.bilibili.com/video/001)
-- [Python编程实战教程](https://www.bilibili.com/video/002)
-- [工业自动化应用案例](https://www.bilibili.com/video/003)
-
-### 技术分享
-- [嵌入式Linux开发技巧](https://www.bilibili.com/video/004)
-- [RS485通信协议详解](https://www.bilibili.com/video/005)
-
+- [pyv3s 控制器运行自定义轨迹](https://www.bilibili.com/video/BV1Re4de3Exe/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [如何使用板载 io 输出](https://www.bilibili.com/video/BV18oHkenEic/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [写一段代码 让电机运行起来](https://www.bilibili.com/video/BV12eH5eaEeC/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [修改一下代码 让两个电机跑起来](https://www.bilibili.com/video/BV12YH5eAE2V/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [如何连接两台电机](https://www.bilibili.com/video/BV1q1HgeBEcH/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [如何扫描和修改 ID](https://www.bilibili.com/video/BV1BkHge6Ev9/)
+- [如何使用 winscp 工具进行上传和下载文件](https://www.bilibili.com/video/BV1hMsVeGEYU/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+-[如何使用 vscode 编写上传运行代码](https://www.bilibili.com/video/BV1kAsGedEMx/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [如何使用以太网接口登录控制器](https://www.bilibili.com/video/BV11ds3ehEmq/)
+- [如何使用 TTL 串口线登录 PyV3s 控制器](https://www.bilibili.com/video/BV1ZEsNeYEW2/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
