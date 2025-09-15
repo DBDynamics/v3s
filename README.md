@@ -164,8 +164,8 @@ PyV3s是DBD团队开发的一款超小型Python控制器，具有以下特点：
 
 ### 最新库文件下载
 
-- [libpro.py](downloads/libpro.py) - 主要功能库
-- [libio.py](downloads/libio.py) - IO控制库
+- [libpro.py](python/libpro.py) - 主要功能库
+- [libio.py](python/libio.py) - IO控制库
 
 ### 连接方式
 
