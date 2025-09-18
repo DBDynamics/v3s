@@ -139,6 +139,11 @@ class Bee:
         self.m.seek(0x6000)
         self.m.write(value.to_bytes(4,"little"))
     
+    def getOnline(self):
+        self.m.seek(0x6000)
+        value = int.from_bytes(self.m.read(4),"little", signed=True)
+        return value
+    
     def getUdpSharedRam(self):
         self.m.seek(0x6000)
         return self.m.read(1024)
@@ -787,10 +792,14 @@ class Bee:
         online = []
         self.clearOnline()
         print('Searching Online Devices...')
+        # for i in range(0, 64):
+        #     self._setValue(i, self._INDEX_BOARD_TYPE, 0)
         for i in range(0, 64):
-            self._setValue(i, self._INDEX_BOARD_TYPE, 0)
+            self.getDeviceType(i)
+        time.sleep(0.1)
+        ret = self.getOnline()
         for i in range(0, 64):
-            if self.getDeviceType(i) != 0:
+            if ret & (1 << i):
                 online.append(i)
         print('Online Devices:')
         print(online)

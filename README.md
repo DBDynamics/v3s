@@ -320,116 +320,31 @@ for loop in range(0, 100):
 # 关闭串口
 port.close()
 ```
-
-### USB接口使用
-
-USB接口支持标准USB设备连接，如USB摄像头、USB存储设备等。
-
-**代码示例：**
-
-```python
-import os
-import subprocess
-
-# 检测USB设备
-result = subprocess.run(['lsusb'], capture_output=True, text=True)
-print("USB设备列表：")
-print(result.stdout)
-
-# 挂载USB存储设备
-os.system('mount /dev/sda1 /mnt/usb')
+### RS485总线的使用
+#### 扫描在线设备
+```bash
+# python3 scan.py
+Searching Online Devices...
+Online Devices:
+[0, 1]
+# 
 ```
-
-### RS485总线控制电机运行
-
-RS485总线支持多设备通信，可用于控制步进电机、伺服电机等设备。
-
-**代码示例：**
-
-```python
-import serial
-import time
-
-# 初始化RS485通信
-rs485 = serial.Serial('/dev/ttyS1', 9600, timeout=0.1)
-
-# 电机控制命令
-def motor_control(device_id, speed, direction):
-    cmd = bytearray([device_id, 0x06, speed, direction, 0x00, 0x00])
-    rs485.write(cmd)
-    response = rs485.read(8)
-    return response
-
-# 控制电机运行
-motor_control(0x01, 100, 1)  # 设备1，速度100，正向
-time.sleep(2)
-motor_control(0x01, 0, 0)    # 停止
+注意: 出厂默认编号为0或者0,1 需要单独连接每一个设备进行修改保存 保证编号不重复再进行总线级联
+### 如何修改ID
+- [最新changeID.py](python/changeID.py)
+例子: 把ID为0的设备修改为ID为2
+```bash
+# python3 changeID.py 0 2
+正在将设备ID从 0 修改为 2
+设备ID修改成功：0 -> 2
 ```
-
-### 外部IO模块扩展
-
-可通过RS485或其他通信方式扩展更多IO接口。
-
-**代码示例：**
-
-```python
-from libio import GPIO
-import serial
-
-# 本地IO
-local_io = GPIO()
-
-# 扩展IO模块通信
-extend_io = serial.Serial('/dev/ttyS2', 9600)
-
-def read_extend_io(module_id, channel):
-    cmd = bytearray([module_id, 0x01, channel])
-    extend_io.write(cmd)
-    response = extend_io.read(4)
-    return response[3] if len(response) >= 4 else 0
-
-# 读取扩展IO状态
-status = read_extend_io(0x02, 0x01)
-print(f"扩展IO状态: {status}")
+例子: 把ID为0的设备修改为ID为4
+```bash
+# python3 changeID.py 0 4
+正在将设备ID从 0 修改为 4
+设备ID修改成功：0 -> 4
 ```
-
-### 灯光控制模块
-
-支持PWM调光、RGB灯带控制等功能。
-
-**代码示例：**
-
-```python
-import time
-from libio import GPIO
-
-io = GPIO()
-
-# PWM调光控制
-def pwm_light_control(brightness):
-    """brightness: 0-255"""
-    duty_cycle = brightness / 255.0
-    # 通过IO输出控制PWM
-    for i in range(100):
-        if i < duty_cycle * 100:
-            io.setOutput(0x01)  # 输出高电平
-        else:
-            io.setOutput(0x00)  # 输出低电平
-        time.sleep(0.0001)
-
-# RGB灯带控制
-def rgb_control(r, g, b):
-    """RGB值控制"""
-    rgb_data = bytearray([0xFF, r, g, b, 0x00, 0xFF])
-    # 通过串口发送RGB数据
-    return rgb_data
-
-# 渐变效果
-for brightness in range(0, 256, 5):
-    pwm_light_control(brightness)
-    time.sleep(0.1)
-```
-
+注意: 一拖二双轴驱动器只需要修改第一个编号 比如 0,1 只需要修改0->N 1会自动修改为N+1 
 ## 参考示例
 ### 项目案例
 
