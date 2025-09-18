@@ -442,6 +442,6 @@ for brightness in range(0, 256, 5):
 - [如何连接两台电机](https://www.bilibili.com/video/BV1q1HgeBEcH/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
 - [如何扫描和修改 ID](https://www.bilibili.com/video/BV1BkHge6Ev9/)
 - [如何使用 winscp 工具进行上传和下载文件](https://www.bilibili.com/video/BV1hMsVeGEYU/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
--[如何使用 vscode 编写上传运行代码](https://www.bilibili.com/video/BV1kAsGedEMx/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
+- [如何使用 vscode 编写上传运行代码](https://www.bilibili.com/video/BV1kAsGedEMx/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
 - [如何使用以太网接口登录控制器](https://www.bilibili.com/video/BV11ds3ehEmq/)
 - [如何使用 TTL 串口线登录 PyV3s 控制器](https://www.bilibili.com/video/BV1ZEsNeYEW2/?vd_source=1bf81de6c7b29ab112e8d99bca0303d8)
