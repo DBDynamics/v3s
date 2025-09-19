@@ -347,6 +347,226 @@ Online Devices:
 设备ID修改成功：0 -> 4
 ```
 注意: 一拖二双轴驱动器只需要修改第一个编号 比如 0,1 只需要修改0->N 1会自动修改为N+1 
+
+### 如果使用位置模式
+> 位置模式的核心参数及意义
+- 目标位置: 想要到达的位置
+- 运行速度: 在运行过程中能达到的最大运行速度
+- 加速时间: 加速到最大运行速度需要的时间
+- 实际位置: 当前时间电机的位置
+
+> 位置模式的运行原理:
+- 进入位置模式后, 当目标位置与实际位置不同时,开始运动.
+- 运动时有加速过程和减速过程, 由加速时间与运行速度决定
+
+> 示例代码 [demo_beed.py](python/demo_beed.py)
+``` python
+# 导入libpro库中的Bee类，用于控制步进电机
+from libpro import Bee
+
+# 创建Bee对象实例，用于电机控制
+m = Bee()
+
+# 设置目标速度为1000
+m.setTargetVelocity(1000)
+
+# 设置加速时间为500毫秒
+m.setAccTime(500)
+
+# 定义轴ID为0，表示控制第0号轴
+axis_id = 0
+
+# 循环执行3次往返运动
+for loop in range(3):
+    # 设置目标位置为51200*3=153600脉冲（正向运动）
+    m.setTargetPosition(axis_id, 51200*3)
+    # 等待电机到达目标位置
+    m.waitTargetPositionReached(axis_id)
+
+    # 设置目标位置为0（返回原点）
+    m.setTargetPosition(axis_id, 0)
+    # 等待电机到达原点位置
+    m.waitTargetPositionReached(axis_id)
+
+# 停止电机运行并释放资源
+m.stop()
+```
+
+### 如何使用回零模式
+> 回零模式的核心参数及意义
+- 回零方向: 回零运动的方向, 可以是正方向或负方向
+- 回零触发电平: 触发回零运动的电平, 通常是低电平或高电平
+- 回零过程中的目标速度: 回零过程中电机的运行速度, 可以根据需要调整
+> 回零模式的运行原理:
+- 回零模式下, 电机根据设置的回零方向和触发电平, 开始向回零方向运动.
+- 当触发电平触发时, 电机停止运动, 并将当前位置作为新的原点.
+- 回零模式通常用于将电机定位到一个已知的参考点, 例如零点或参考线.
+
+> 回零模式的示例代码 [demo_home.py](python/demo_home.py)
+``` python
+# 导入libpro库中的Bee类，用于控制步进电机
+from libpro import Bee
+# 从demo_beed模块导入axis_id（虽然下面重新定义了）
+from python.demo_beed import axis_id
+
+# 创建Bee对象实例，用于电机控制
+m = Bee()
+
+# 定义轴ID为0，表示控制第0号轴
+axis_id = 0
+
+# 设置回零方向为1（正方向回零）
+# 参数说明：1=正方向，-1=负方向
+m.setHomingDirection(axis_id, 1)
+
+# 设置回零触发电平为0（低电平触发）
+# 参数说明：0=低电平触发，1=高电平触发
+m.setHomingLevel(axis_id, 0)
+
+# 设置回零过程中的目标速度为200（脉冲/秒）
+m.setTargetVelocity(axis_id, 200)
+
+# 启动回零模式，电机开始寻找原点位置
+m.setHomingMode(axis_id)
+
+# 等待回零完成，直到电机到达原点位置
+m.waitTargetPositionReached(axis_id)
+
+# 停止电机运行并释放资源
+m.stop()
+```
+
+## libpro.Bee 类库详解
+
+### 🔧 **核心功能**
+`libpro.Bee` 是一个用于控制步进电机和无刷直流电机的Python库，主要用于工业自动化和运动控制系统。
+
+### 📋 **主要特性**
+
+#### 1. **设备类型支持**
+```python
+# 支持的设备类型
+_BOARD_TYPE_STEPPER_ANT = 0x10      # 步进电机 ANT
+_BOARD_TYPE_STEPPER_BEE = 0x11      # 步进电机 BEE  
+_BOARD_TYPE_STEPPER_ELEPHANT = 0x12 # 步进电机 ELEPHANT
+_BOARD_TYPE_BDCS_BEE = 0x13         # 有刷直流电机 BEE
+_BOARD_TYPE_BDC_BEE = 0x14          # 直流电机 BEE
+_BOARD_TYPE_BLDCS_BEE = 0x15        # 无刷直流电机 BEE
+```
+
+#### 2. **运行模式**
+```python
+# 操作模式
+_OPERATION_MODE_PWM = 0                    # PWM模式
+_OPERATION_MODE_PROFILE_VELOCITY = 21     # 速度模式
+_OPERATION_MODE_PROFILE_POSITION = 31     # 位置模式
+_OPERATION_MODE_HOMING = 40               # 回零模式
+_OPERATION_MODE_ESTOP = 61                # 急停模式
+_OPERATION_SYNC_INTERPOLATION_POSITION = 34 # 同步插补位置模式
+```
+
+### 🚀 **常用方法分类**
+
+#### **电源控制**
+```python
+m = Bee()
+m.setPowerOn(id)           # 上电
+m.setPowerOff(id)          # 断电
+m.setPowerLimit(id, value) # 设置功率限制
+```
+
+#### **运动控制**
+```python
+# 设置运行模式
+m.setVelocityMode(id)      # 速度模式
+m.setPositionMode(id)      # 位置模式
+m.setHomingMode(id)        # 回零模式
+m.setPWMMode(id)           # PWM模式
+
+# 运动参数设置
+m.setTargetVelocity(id, velocity)  # 设置目标速度
+m.setTargetPosition(id, position)  # 设置目标位置
+m.setAccTime(id, time)             # 设置加速时间
+```
+
+#### **状态读取**
+```python
+# 获取实时状态
+position = m.getActualPosition(id)  # 获取当前位置
+velocity = m.getActualVelocity(id)  # 获取当前速度
+status = m.getStatus(id)            # 获取设备状态
+io_input = m.getInputIO(id)         # 获取IO输入状态
+```
+
+#### **参数配置**
+```python
+# PID参数调节
+m.setKPP(id, value)        # 设置位置比例增益
+m.setKPI(id, value)        # 设置位置积分增益
+m.setKVF(id, value)        # 设置速度前馈增益
+m.setKFF(id, value)        # 设置前馈增益
+
+# 电流控制
+m.setRunningCurrent(id, current)   # 设置运行电流
+m.setKeepingCurrent(id, current)   # 设置保持电流
+m.setCurrentMax(id, current)       # 设置最大电流
+```
+
+#### **设备管理**
+```python
+# 设备扫描和ID管理
+devices = m.scanDevices()          # 扫描在线设备
+m.changeID(old_id, new_id)         # 修改设备ID
+board_type = m.getBoardType(id)    # 获取设备类型
+```
+
+### 💡 **典型使用示例**
+
+```python
+from libpro import Bee
+import time
+
+# 初始化
+m = Bee()
+
+# 设备ID
+device_id = 0
+
+try:
+    # 1. 上电
+    m.setPowerOn(device_id)
+    time.sleep(0.5)
+    
+    # 2. 设置位置模式
+    m.setPositionMode(device_id)
+    
+    # 3. 设置运动参数
+    m.setAccTime(device_id, 1000)      # 加速时间1秒
+    m.setTargetPosition(device_id, 10000)  # 目标位置
+    
+    # 4. 等待运动完成
+    m.waitTargetPositionReached(device_id)
+    
+    # 5. 获取当前状态
+    current_pos = m.getActualPosition(device_id)
+    print(f"当前位置: {current_pos}")
+    
+finally:
+    # 6. 断电并停止
+    m.setPowerOff(device_id)
+    m.stop()
+```
+
+### 🔍 **技术特点**
+
+1. **底层通信**：基于共享内存和DMA缓冲区实现高效通信
+2. **多轴支持**：支持最多32轴同时控制
+3. **实时性**：通过独立线程处理通信，保证实时性
+4. **插补功能**：支持多轴同步插补运动
+5. **安全机制**：包含急停、限位、过流保护等安全功能
+
+这个库是PyV3s控制器的核心运动控制库，为工业自动化应用提供了完整的电机控制解决方案。
+        
 ## 参考示例
 ### 项目案例
 
