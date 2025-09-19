@@ -170,19 +170,21 @@ PyV3s是DBD团队开发的一款超小型Python控制器，具有以下特点：
 ### 连接方式
 
 #### USB串口终端登录
-> 详细步骤请参考用户手册
+> [putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 
 #### 网口登录控制器
 > 默认IP地址：192.168.10.22
 
 #### VsCode开发环境配置
-> 支持远程开发和代码同步
+> [vscode](https://code.visualstudio.com/)
 
 #### WinSCP文件传输
 > 用于上传/下载代码文件
+> [winscp](https://winscp.net/eng/download.php)
 
 #### MobaXTerm使用
 > 集成SSH和文件传输功能
+> [mobaxterm](https://mobaxterm.mobatek.net/download.html)
 
 ### Python代码运行
 
